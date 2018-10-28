@@ -1,13 +1,13 @@
-# `devapps`: DevOps Ready Applications
+# DevApps: DevOps Ready Applications
 
 [![Build Status][cisvg]][ci] [![Coverage Status][covsvg]][cov] [![PyPI version][pypisvg]][pypi] [![Code style: black][blacksvg]][black]
 
-[cisvg]: https://travis-ci.org/axiros/devapps.svg?branch=master
-[ci]: https://travis-ci.org/axiros/devapps
-[covsvg]: https://codecov.io/github/axiros/devapps/branch/master/graph/badge.svg
-[cov]: https://codecov.io/github/axiros/devapps
-[pypisvg]: https://badge.fury.io/py/devapps.svg
-[pypi]: https://badge.fury.io/py/devapps
+[cisvg]: https://travis-ci.org/axiros/DevApps.svg?branch=master
+[ci]: https://travis-ci.org/axiros/DevApps
+[covsvg]: https://codecov.io/github/axiros/DevApps/branch/master/graph/badge.svg
+[cov]: https://codecov.io/github/axiros/DevApps
+[pypisvg]: https://badge.fury.io/py/DevApps.svg
+[pypi]: https://badge.fury.io/py/DevApps
 [blacksvg]: https://img.shields.io/badge/code%20style-black-000000.svg
 [black]: https://github.com/ambv/black
 
