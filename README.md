@@ -12,7 +12,6 @@
 [black]: https://github.com/ambv/black
 
 
-
 <!-- badges: http://thomas-cokelaer.info/blog/2014/08/1013/ -->
 
 <!-- autogen tutorial -->
