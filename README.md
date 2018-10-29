@@ -1,4 +1,4 @@
-# DevApps: DevOps Ready Applications
+# DevApps - DevOps Ready Applications
 
 [![Build Status][cisvg]][ci] [![Coverage Status][covsvg]][cov] [![PyPI version][pypisvg]][pypi] [![Code style: black][blacksvg]][black]
 
@@ -10,7 +10,6 @@
 [pypi]: https://badge.fury.io/py/DevApps
 [blacksvg]: https://img.shields.io/badge/code%20style-black-000000.svg
 [black]: https://github.com/ambv/black
-
 
 <!-- badges: http://thomas-cokelaer.info/blog/2014/08/1013/ -->
 
@@ -59,11 +58,11 @@ $ export Calc_oper_func=mul Calc_run='{"a":100}'; devapp ./calc.py  b=4
 400
 
 $ devapp ./calc.py a=1 b=foo # b has wrong type
-0.03346 [error    ] Cannot cast expected_type=int for_param=b got=foo
+0.01914 [error    ] Cannot cast expected_type=int for_param=b got=foo
 
 $ devapp ./calc.py # missing params
-0.03366 [error    ] Value required param=a type=int
-0.03408 [error    ] Value required param=b type=int
+0.02090 [error    ] Value required param=a type=int
+0.02125 [error    ] Value required param=b type=int
 
 $ devapp ./calc.py of=mul -h # help output
 
@@ -316,7 +315,7 @@ $ ./calc1.py 5 42
 ```
 ```bash
 $ ./calc1.py 5
-0.03348 [error    ] Value required param=b type=int
+0.03538 [error    ] Value required param=b type=int
 ```
 Here is the output of `-h`:
 ```markdown
