@@ -1,4 +1,5 @@
 from __future__ import absolute_import, print_function
+from .version import __version__
 
 import time
 import string
@@ -7,39 +8,55 @@ import os
 import json
 
 from ast import literal_eval
-from collections import OrderedDict
 from appdirs import user_config_dir
 from functools import partial
 
 
-from .version import __version__
-from devapps import common
 from .func_sigs import map_args_to_func_sig, repl_func_defaults
 from .func_sigs import flatten_dotted_arg_from_dict
 from .casting import funcname, cast, t_attr, t_funcs
 from .casting import is_cls, attr
 
-from .common import set_log, info, debug, warn, error, get_structlogger
+
+from devapps import common
 
 nil = common.nil
 Exc = common.Exc
 throw = common.throw
 is_str = common.is_str
 breakpoint = common.breakpoint
+from .common import set_log, info, debug, warn, error, get_structlogger
 
 odict = dict
 if common.PY2:
     from .casting import recursive_to_new_style
+    from collections import OrderedDict
 
     # unfortuntatelly in py2 dicts are not insertion ordered.
     # we rely on this, .e.g in pre_parse_cli:
     odict = OrderedDict
 
+
+# -------------------------------------------------------- Base Config Provider
+class Provider(object):
+    # fmt: off
+    str_only             = False
+    allow_short_keys     = False
+    set_runner_func      = False
+    allow_unknown_attrs  = True
+    show_help            = None
+    # fmt: on
+
+    def get_inner(cli, d, path, attrs, cfg):
+        return d.get(path[-1])
+
+
 # -------------------------------------------------------------- Key Shortening
 
 
 def shorten(k):
-    """k an attrname like foo_bar_baz.
+    """
+    k an attrname like foo_bar_baz.
     We return fbb, fbbaz, which we'll match startswith style if exact match
     not unique.
     """
@@ -114,17 +131,6 @@ def short_to_long(provider, d, attrs, ctx):
 
 
 # ------------------------------------------------------------------------- CLI
-class Provider(object):
-    # fmt: off
-    str_only             = False
-    allow_short_keys     = False
-    set_runner_func      = False
-    allow_unknown_attrs  = True
-    show_help            = None
-    # fmt: on
-
-    def get_inner(cli, d, path, attrs, cfg):
-        return d.get(path[-1])
 
 
 def cli_prov(App, argv=None):
@@ -227,7 +233,6 @@ class CLI(Provider):
 
 
 # --------------------------------------------------------------------- Environ
-from ast import literal_eval
 
 
 def conv_str(v):

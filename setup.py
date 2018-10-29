@@ -43,7 +43,7 @@ setup(
     long_description_content_type='text/markdown',
     include_package_data=True,
     url='http://github.com/axiros/DevApps',
-    download_url='http://github.com/axiros/DevApps/tarball/',
+    # download_url='http://github.com/axiros/DevApps/tarball/',
     keywords=['app', 'config', 'source code'],
     test_suite='nose.collector',
     tests_require=['nose', 'unittest2', 'coveralls'],

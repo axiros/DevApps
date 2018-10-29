@@ -4,19 +4,19 @@ from ast import literal_eval
 from functools import partial
 import attr
 
+
 filepath = '<filepath>'
 
-# --------------------------------------------------------- Casting From Strings
 
 t_attr = type(attr.ib())
 
 
+# for PY2:
 class plain_class:
     def __(self):
         pass
 
 
-# for PY2:
 _ = plain_class
 t_funcs = (type(lambda x: x), type(_.__), type(partial(_.__)))
 if PY2:
