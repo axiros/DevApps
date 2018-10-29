@@ -18,10 +18,9 @@
 
 [TOC]
 
-# `devapp`: Configures and Runs Functions
+# `devapp`: Command Line Function Configurator and Runner
 
-The `devapp` command allows to configure and run setups like these
-directly:
+Given you have a setup like this:
 
 ```python
 import operator
@@ -40,6 +39,11 @@ class Calc:
         raise Exception('not supported:', self.oper_func)
 ```
 
+> Don't worry about the strange way of hinting parameter types for now, this is
+> just one way to do it.
+
+Via the `devapp` command, you can provide config on the CLI (in addition to
+config file and environ) and run this right away:
 
 ```bash
 $ devapp ./calc.py 41 1
@@ -58,11 +62,11 @@ $ export Calc_oper_func=mul Calc_run='{"a":100}'; devapp ./calc.py  b=4
 400
 
 $ devapp ./calc.py a=1 b=foo # b has wrong type
-0.01914 [error    ] Cannot cast expected_type=int for_param=b got=foo
+0.02262 [error    ] Cannot cast expected_type=int for_param=b got=foo
 
 $ devapp ./calc.py # missing params
-0.02090 [error    ] Value required param=a type=int
-0.02125 [error    ] Value required param=b type=int
+0.01970 [error    ] Value required param=a type=int
+0.02011 [error    ] Value required param=b type=int
 
 $ devapp ./calc.py of=mul -h # help output
 
@@ -82,7 +86,7 @@ Calculator Demo
 
 Runs operator function on the arguments
 
-> do_run(a=<'int'>, b=<'int'>)
+> do_run(a=<int>, b=<int>)
 ```
 
 
@@ -211,7 +215,7 @@ Sums up all numbers given
 
 Runs operator function on the arguments
 
-> do_run(a=<'int'>, b=<'int'>)
+> do_run(a=<int>, b=<int>)
 ```
 
 ### Markdown?
@@ -315,7 +319,7 @@ $ ./calc1.py 5 42
 ```
 ```bash
 $ ./calc1.py 5
-0.03538 [error    ] Value required param=b type=int
+0.03085 [error    ] Value required param=b type=int
 ```
 Here is the output of `-h`:
 ```markdown
@@ -338,10 +342,10 @@ Calculator Demo
 Runs operator function on the arguments
 :::warning
 Defaults modified (by File):
-- a: 10 (was <'int'>)
+- a: 10 (was <int>)
 :::
 
-> do_run(a=10, b=<'int'>)
+> do_run(a=10, b=<int>)
 ```
 Again the app was reconfigured - this time by the config file (F)
 
@@ -385,10 +389,10 @@ Calculator Demo
 Runs operator function on the arguments
 :::warning
 Defaults modified (by Env):
-- b: 4 (was <'int'>)
+- b: 4 (was <int>)
 :::
 
-> do_run(a=<'int'>, b=4)
+> do_run(a=<int>, b=4)
 ```
 
 Up to now there is no indication within the app regarding allowed values for the operator function.
@@ -478,7 +482,7 @@ Calculator Demo
 
 Runs operator function on the arguments
 
-> do_run(a=<'int'>, b=<'int'>)
+> do_run(a=<int>, b=<int>)
 
 ---
 ## log
@@ -500,7 +504,7 @@ Defaults modified (by CLI):
 - ev: hi (was hello)
 :::
 
-> do_testmsg(ev='hi')
+> do_testmsg(ev=hi)
 ```
 
 ## Tree Navigation

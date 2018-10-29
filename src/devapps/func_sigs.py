@@ -158,7 +158,10 @@ def map_args_to_func_sig(
 
 
 def pretty_type(sigstr):
-    return str(sigstr).replace('<class ', '<').replace('<type ', '<')
+    s = str(sigstr)
+    for f, t in (('<class ', '<'), ('<type ', '<'), ("'", '')):
+        s = s.replace(f, t)
+    return s
 
 
 def repl_func_defaults(func, dflts, provider):

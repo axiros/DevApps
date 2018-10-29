@@ -20,13 +20,17 @@ class TestChapter1:
 
         [TOC]
 
-        # `devapp`: Configures and Runs Functions
+        # `devapp`: Command Line Function Configurator and Runner
 
-        The `devapp` command allows to configure and run setups like these
-        directly:
+        Given you have a setup like this:
 
         <from-file: calc.py>
 
+        > Don't worry about the strange way of hinting parameter types for now, this is
+        > just one way to do it.
+
+        Via the `devapp` command, you can provide config on the CLI (in addition to
+        config file and environ) and run this right away:
 
         """
         md(t)
@@ -300,7 +304,7 @@ class TestChapter1:
         """
         md(t)
         res = bash_run('calc_tree.py l.l=20 l.t.ev=hi of=mul -h')
-        assert "do_testmsg(ev='hi')" in str(res)
+        assert 'do_testmsg(ev=hi)' in str(res)
 
     def test_tree_navigation(self):
         t = """
