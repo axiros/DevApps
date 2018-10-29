@@ -27,8 +27,13 @@ throw = common.throw
 is_str = common.is_str
 breakpoint = common.breakpoint
 
+odict = dict
 if common.PY2:
     from .casting import recursive_to_new_style
+
+    # unfortuntatelly in py2 dicts are not insertion ordered.
+    # we rely on this, .e.g in pre_parse_cli:
+    odict = OrderedDict
 
 # -------------------------------------------------------------- Key Shortening
 
@@ -49,7 +54,7 @@ def to_shorts(longs, shorten=shorten):
     Collisions: We'll complain for foo_bar_baz and foo_baz_baz attrs
     and don't try to be smart here. Thats why we need the 'have' list.
     """
-    m = dict()
+    m = odict()
     have = set()
     for k in longs:
         m[k] = k  # allowed match stsarts with also ok
@@ -80,7 +85,7 @@ def short_to_long(provider, d, attrs, ctx):
     shorts = ctx.get('shorts')
     if not shorts:
         shorts = ctx['shorts'] = to_shorts([l[0] for l in attrs if l])
-    nd = dict()
+    nd = odict()
     orig_shorts = {}
     for k in d:
         if k in ('', '/'):
@@ -132,7 +137,7 @@ def cli_prov(App, argv=None):
 @attr.s
 class CLI(Provider):
     # fmt: off
-    argvd                  = attr.ib(type= dict, converter = lambda x: CLI.pre_parse_cli(x))
+    argvd                  = attr.ib(type= odict, converter = lambda x: CLI.pre_parse_cli(x))
     switches               = attr.ib(default={}, validator = lambda *x: CLI.set_switches(*x))
     allow_short_keys       = attr.ib(True)
     set_runner_func        = attr.ib(True)
@@ -147,7 +152,7 @@ class CLI(Provider):
         """just take the command line appart, w/o knowledge of app vars yet
         What we do though is to build nested dicts for f.b=bar style vars
         """
-        r, _into = dict(), CLI.into
+        r, _into = odict(), CLI.into
         idx, leng = -1, len(argv) - 1
         while idx < leng:
             idx += 1
@@ -173,6 +178,7 @@ class CLI(Provider):
             else:
                 # app 1 2
                 _into(r, arg, 'is_set')
+
         return r
 
     @staticmethod
@@ -196,7 +202,7 @@ class CLI(Provider):
         if not switches:
             return
         # must preserve the order of original, can't just replace:
-        d = dict()
+        d = odict()
         for k, v in cli.argvd.items():
             if not k.startswith('-'):
                 d[k] = v
@@ -241,7 +247,7 @@ class Env(Provider):
     def build_env_dict(env):
         e = os.environ
         l = len(env.prefix)
-        return dict(
+        return odict(
             [(k[l:], conv_str(e[k])) for k in e if k.startswith(env.prefix)]
         )
 
@@ -251,7 +257,7 @@ class Env(Provider):
     def get_inner(env, d, path, attrs, cfg):
         p = path[-1] + '_'
         l = len(p)
-        d = dict([(k[l:], v) for k, v in d.items() if k.startswith(p)])
+        d = odict([(k[l:], v) for k, v in d.items() if k.startswith(p)])
         return d
 
 
@@ -291,7 +297,7 @@ class File(Provider):
             file._cfg = json.loads(s)
         except Exception as ex:
             msg = Exc.file_not_found
-            args = dict(exc=ex, fn=fn)
+            args = odict(exc=ex, fn=fn)
             if die:
                 throw(msg, **args)
             debug(msg, **args)
@@ -422,7 +428,6 @@ def walk_attrs(cls, providers, ctx):
                             have_attrs.remove(k)
                             have_cfg = False
                             continue
-
                         repl_func_defaults(func=v, dflts=cfg_val, provider=_)
                     # (else we just have 'is_set' if its the function req. to
                     # run - then we do not change defaults)
@@ -470,6 +475,7 @@ def walk_attrs(cls, providers, ctx):
         v.metadata['orig'] = v_orig
         v.metadata['provider'] = from_prov
         setattr(cls, k, v)
+
     for p in providers:
         # cli is a provider which sets the runner func:
         p[1].pop('_orig_shorts_', 0)

@@ -11,6 +11,8 @@ import appdirs
 import time
 from ast import literal_eval as ev
 
+breakpoint = devapps.common.breakpoint
+
 
 class TestChapter1:
     def test_one(self):

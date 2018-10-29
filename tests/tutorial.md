@@ -43,13 +43,11 @@ $ export Calc_oper_func=mul Calc_run='{"a":100}'; devapp ./calc.py  b=4
 400
 
 $ devapp ./calc.py a=1 b=foo # b has wrong type
-0.01978 [error    ] Cannot cast expected_type=int for_param=b got=foo
-
+0.02076 [error    ] Cannot cast expected_type=int for_param=b got=foo
 
 $ devapp ./calc.py # missing params
-0.02418 [error    ] Value required param=a type=int
-0.02462 [error    ] Value required param=b type=int
-
+0.01913 [error    ] Value required param=a type=int
+0.01956 [error    ] Value required param=b type=int
 
 $ devapp ./calc.py of=mul -h # help output
 
@@ -302,7 +300,7 @@ $ ./calc1.py 5 42
 ```
 ```bash
 $ ./calc1.py 5
-0.04413 [error    ] Value required param=b type=int
+0.03102 [error    ] Value required param=b type=int
 ```
 Here is the output of `-h`:
 ```markdown
@@ -323,6 +321,10 @@ Calculator Demo
 ### run
 
 Runs operator function on the arguments
+:::warning
+Defaults modified (by File):
+- a: 10 (was <'int'>)
+:::
 
 > do_run(a=10, b=<'int'>)
 ```
@@ -366,6 +368,10 @@ Calculator Demo
 ### run
 
 Runs operator function on the arguments
+:::warning
+Defaults modified (by Env):
+- b: 4 (was <'int'>)
+:::
 
 > do_run(a=<'int'>, b=4)
 ```
@@ -418,7 +424,7 @@ class Calc:
 ```
 ```bash
 $ ./calc_tree.py 1 299
-[10] Calculating {'a': 1, 'operation': 'add', 'b': 299}
+[10] Calculating {'operation': 'add', 'a': 1, 'b': 299}
 [20] Returning {'result': 300}
 300
 
@@ -474,6 +480,10 @@ Print Logger
 
 #### testmsg
 
+:::warning
+Defaults modified (by CLI):
+- ev: hi (was hello)
+:::
 
 > do_testmsg(ev='hi')
 ```
@@ -530,11 +540,11 @@ $ ./calc_tree_nav.py av=100 i.iv=200 i.D.dv=300 i.D.nd
 Configurative state can be pretty printed and dict-dumped:
 ```bash
 $ ./calc_tree_nav.py av=1 i.D.dv=42 du # du matched to dump
-App(app_var=1, inner=Inner(Deep=Deep(deep_var=42), inner_var=1))
+App(app_var=1, inner=Inner(Deep=Inner.Deep(deep_var=42), inner_var=1))
 
 
 $ ./calc_tree_nav.py app_var=2 inner.Deep.deep_var=42 dump asdict=true
-{'app_var': 2, 'inner': {'inner_var': 1, 'Deep': {'deep_var': 42}}}
+{'app_var': 2, 'inner': {'Deep': {'deep_var': 42}, 'inner_var': 1}}
 ```
 
 The dict format can be piped as is into a config file for subsequent runs.

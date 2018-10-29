@@ -49,6 +49,9 @@ def map_args_to_func_sig(
 
     Maybe it can be done more effective, not sure yet:
 
+    # update: We use funcsigs now for py2... maybe later add the argspec
+    # version back again.
+
     """
     cli = fix_dotted_cli_vals(cli)
     if map_from == -1:
