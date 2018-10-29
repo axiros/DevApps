@@ -10,7 +10,6 @@ class Calc:
 
     oper_func = 'add'
 
-    # Simple PY2 compat type hints for less imperative code:
     def do_run(calc, a=int, b=int):
         """Runs operator function on the arguments"""
         return getattr(operator, calc.oper_func, calc.not_found)(a, b)

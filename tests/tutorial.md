@@ -16,6 +16,7 @@ class Calc:
 
     oper_func = 'add'
 
+    # One (PY2 compatible) way to provide type hints (optional, for less imperative code):
     def do_run(self, a=int, b=int):
         """Runs operator function on the arguments"""
         return getattr(operator, self.oper_func, self.not_found)(a, b)
@@ -23,9 +24,6 @@ class Calc:
     def not_found(self, *a, **kw):
         raise Exception('not supported:', self.oper_func)
 ```
-
-> Don't worry about the strange way of hinting parameter types for now, this is
-> just one way to do it.
 
 Via the `devapp` command, you can provide config on the CLI (in addition to
 config file and environ) and run this right away:
@@ -47,11 +45,11 @@ $ export Calc_oper_func=mul Calc_run='{"a":100}'; devapp ./calc.py  b=4
 400
 
 $ devapp ./calc.py a=1 b=foo # b has wrong type
-0.02262 [error    ] Cannot cast expected_type=int for_param=b got=foo
+0.02407 [error    ] Cannot cast expected_type=int for_param=b got=foo
 
 $ devapp ./calc.py # missing params
-0.01970 [error    ] Value required param=a type=int
-0.02011 [error    ] Value required param=b type=int
+0.01952 [error    ] Value required param=a type=int
+0.01986 [error    ] Value required param=b type=int
 
 $ devapp ./calc.py of=mul -h # help output
 
@@ -92,7 +90,6 @@ class Calc:
 
     oper_func = 'add'
 
-    # Simple PY2 compat type hints for less imperative code:
     def do_run(calc, a=int, b=int):
         """Runs operator function on the arguments"""
         return getattr(operator, calc.oper_func, calc.not_found)(a, b)
@@ -103,7 +100,6 @@ class Calc:
 
 We
 - added a hashbang and made the file executable.
-- (optionally) provided type information.
 - decorated the toplevel class.
 
 We can run the thing now from the CLI, directly:
@@ -304,7 +300,7 @@ $ ./calc1.py 5 42
 ```
 ```bash
 $ ./calc1.py 5
-0.03085 [error    ] Value required param=b type=int
+0.03509 [error    ] Value required param=b type=int
 ```
 Here is the output of `-h`:
 ```markdown

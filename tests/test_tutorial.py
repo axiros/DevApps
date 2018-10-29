@@ -26,9 +26,6 @@ class TestChapter1:
 
         <from-file: calc.py>
 
-        > Don't worry about the strange way of hinting parameter types for now, this is
-        > just one way to do it.
-
         Via the `devapp` command, you can provide config on the CLI (in addition to
         config file and environ) and run this right away:
 
@@ -68,7 +65,6 @@ class TestChapter1:
 
         We
         - added a hashbang and made the file executable.
-        - (optionally) provided type information.
         - decorated the toplevel class.
 
         We can run the thing now from the CLI, directly:
