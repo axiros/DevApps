@@ -59,11 +59,11 @@ $ export Calc_oper_func=mul Calc_run='{"a":100}'; devapp ./calc.py  b=4
 400
 
 $ devapp ./calc.py a=1 b=foo # b has wrong type
-0.02076 [error    ] Cannot cast expected_type=int for_param=b got=foo
+0.03346 [error    ] Cannot cast expected_type=int for_param=b got=foo
 
 $ devapp ./calc.py # missing params
-0.01913 [error    ] Value required param=a type=int
-0.01956 [error    ] Value required param=b type=int
+0.03366 [error    ] Value required param=a type=int
+0.03408 [error    ] Value required param=b type=int
 
 $ devapp ./calc.py of=mul -h # help output
 
@@ -316,7 +316,7 @@ $ ./calc1.py 5 42
 ```
 ```bash
 $ ./calc1.py 5
-0.03102 [error    ] Value required param=b type=int
+0.03348 [error    ] Value required param=b type=int
 ```
 Here is the output of `-h`:
 ```markdown
