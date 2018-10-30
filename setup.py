@@ -22,7 +22,7 @@ INST_REQ = ['attrs', 'structlog', 'appdirs', 'colorama']
 if PY2:
     INST_REQ.append('funcsigs')
 
-EXTRA_REQ = {'tests': ['coverage', 'pytest>=3.3.0']}
+EXTRA_REQ = {'tests': ['coverage', 'pytest_to_md', 'pytest>=3.3.0']}
 try:
     PACKAGES
 except NameError:
