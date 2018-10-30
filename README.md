@@ -618,7 +618,7 @@ Further great libs, as from the argh docs:
 - [cliff](http://pypi.python.org/pypi/cliff)
 - [cement](http://builtoncement.com/2.0/)
 
-
+Seems like *every man should plant a tree, raise a son and write a command line parser.*
 
 
 
