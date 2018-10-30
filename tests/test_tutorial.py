@@ -5,13 +5,19 @@ Creates The Tutorial - while testing its functions.
 
 import subprocess as sp
 import pytest
+import pytest_to_md as ptm
 import devapps
 import os
 import appdirs
 import time
 from ast import literal_eval as ev
 
-breakpoint = devapps.common.breakpoint
+breakpoint = ptm.breakpoint
+bash_run = ptm.bash_run
+md = ptm.md
+ptm.setup(__file__)
+markdown = ptm.markdown
+dtut = ptm.cfg['d_assets']
 
 
 class TestChapter1:
@@ -346,40 +352,13 @@ class TestChapter1:
 
     def test_insert_tutorial_into_readme(self):
         """addd the new version of the rendered tutorial into the main readme"""
-        with open(fn) as fd:
-            tut = fd.read()
-
-        fnr = here + '/../README.md'
-        with open(fnr) as fd:
-            readm = fd.read()
-        m = '<!-- autogen tutorial -->'
-        pre, _, post = readm.split(m)
-        with open(fnr, 'w') as fd:
-            fd.write(''.join((pre, m, tut, '\n', m, post)))
+        ptm.write_readme()
 
 
 # ---------------------------------- Tutorial Support Functions and Assignments
 
 
 Exc = devapps.common.Exc
-
-here = os.path.abspath(os.path.dirname(__file__))
-# will contain the tutorial when all tests are run:
-fn = here + '/tutorial.md'
-if os.path.exists(fn):
-    os.unlink(fn)
-
-dtut = here + '/tutorial/'
-
-code = """```code
-%s
-```"""
-# fmt: off
-nothing  = lambda s: s
-python   = lambda s: code.replace('code', 'python')  % s
-bash     = lambda s: code.replace('code', 'bash')  %s
-markdown = lambda s: code.replace('code', 'markdown') % (s.replace('```', "``"))
-# fmt: on
 
 
 def del_user_calc_json():
@@ -388,76 +367,6 @@ def del_user_calc_json():
 
 
 del_user_calc_json()
-
-
-def md(paras, into=nothing):
-    """writes markdown"""
-    paras = [paras]
-    ctx = {}
-    ctx['in_code_block'] = False
-
-    def deindent(p):
-        pp = p.replace('\n', '')
-        ind = len(pp) - len(pp.lstrip())
-        if not ind:
-            return p
-        return '\n'.join(
-            [l[ind:] if not l[:ind].strip() else l for l in p.splitlines()]
-        )
-
-    paras = [deindent(p) for p in paras]
-
-    def repl(l, ctx=ctx):
-        if '```' in l:
-            ctx['in_code_block'] = not ctx['in_code_block']
-
-        ff = '<from-file: '
-        if ff in l:
-            pre, post = l.split(ff, 1)
-            fn, post = post.rsplit('>', 1)
-            with open(here + '/tutorial/' + fn) as fd:
-                s = fd.read().strip()
-            if fn.endswith('.py'):
-                s = python(s)
-            else:
-                s = code % s
-            l = pre + s + post
-        return l
-
-    r = '\n'.join([repl(l) for para in paras for l in para.splitlines()])
-    r = into(r)
-    with open(fn, 'a') as fd:
-        fd.write('\n' + r)
-
-
-def bash_run(cmd, res_as=None, no_cmd_path=False, no_show_in_cmd=''):
-    """runs unix commands, then writes results into the markdown"""
-    if isinstance(cmd, str):
-        cmds = [{'cmd': cmd, 'res': ''}]
-    elif isinstance(cmd, list):
-        cmds = [{'cmd': c, 'res': ''} for c in cmd]
-    else:
-        cmds = cmd
-    orig_cmd = cmds[0]['cmd']
-    if not res_as and orig_cmd.startswith('python -c'):
-        res_as = python
-    D = here + '/tutorial/'
-
-    for c in cmds:
-        cmd = c['cmd']
-        fncmd = cmd if no_cmd_path else (D + cmd)
-        # run it:
-        res = c['res'] = sp.getoutput(fncmd)
-        if no_show_in_cmd:
-            fncmd = fncmd.replace(no_show_in_cmd, '')
-        # .// -> when there is no_cmd_path we would get that, ugly:
-        # this is just for md output, not part of testing:
-        c['cmd'] = fncmd.replace(D, './').strip().replace('.//', './')
-
-    r = '\n\n'.join(['$ %(cmd)s\n%(res)s' % c for c in cmds])
-
-    md(r, into=res_as if res_as else bash)
-    return cmds
 
 
 def appcond_cmd():
